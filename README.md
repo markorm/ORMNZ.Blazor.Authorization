@@ -1,4 +1,7 @@
 # ORMNZ.Blazor.Authorization
+
+#### This is currently a pre-release WORK IN PROGRESS. No guarantees of reliability are given.
+
 Service and Component classes for Blazor component authorization.
 
 This class is heavily inspired by the ASPNetCore authorization system, though it does not leverage the identity system.
