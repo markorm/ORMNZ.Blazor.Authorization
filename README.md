@@ -141,10 +141,10 @@ the required work on your IAuthorizationService.AuthorizeAsync methods.
 
 ### TODOS
 
-* Set up issue tracking stuff.
-* 
 * Implement unit tests for the project to validate the effectiveness and reliability of the current implementation.
-* 
+
 * Use this assembly from other Blazor projects to ensure this approach is sensible for a variety of existing applications.
-* 
+
+* Create a separate development branch to keep new features out of the main branch until they are considered and tested.
+
 * Publish a package on nuget.org
