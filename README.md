@@ -15,7 +15,7 @@ from the AuthorizationServiceBase class.
 register it as a service:
 `services.UseAuthorizationManager<MyAuthorizationManager>();`
 * Add your IAuthorizationService instances:
-`services.AddAuthorization<MyAuthorizationManager>();`
+`services.AddAuthorization<MyAuthorizationService>();`
 * Inject the IAuthorizationManager service into your Blazor component.
 * Inherit from the AuthorizedComponent class
 * Add AuthorizeAttribute Attributes to your component:
