@@ -20,13 +20,13 @@ namespace ORMNZ.Blazor.Authorization
         /// You will need to inject this dependency in your Razor component file.
         /// </remarks>
         [Inject]
-        public IAuthorizationManager AuthorizationServiceManager { get; set; }
+        public IAuthorizationManager AuthorizationManager { get; set; }
 
         /// <summary>
         /// Seal the OnInit method.
         /// This ensures the base OnInit is never called.
         /// </summary>
-        protected sealed override void OnInit()
+        protected override void OnInit()
         {
             OnInitAsync().Wait();
         }
@@ -35,41 +35,15 @@ namespace ORMNZ.Blazor.Authorization
         /// Use the authorization service to verify that access to the AuthorizationComponent
         /// instance is permitted.
         /// </summary>
-        protected sealed override async Task OnInitAsync()
+        protected override async Task OnInitAsync()
         {
             // Get all authorize attributes on this instance.
-            AuthorizeAttribute[] authorizeAttributes = GetType().GetCustomAttributes(typeof(AuthorizeAttribute), false) as AuthorizeAttribute[];
-
-            // If there are no authorization requirements continue component initialization.
-            if (authorizeAttributes.Count() == 0)
+            // We use the BaseType here as the instance in which this method is executing is actually the derived razor view.
+            AuthorizeAttribute[] authorizeAttributes = GetType().BaseType.GetCustomAttributes(typeof(AuthorizeAttribute), false) as AuthorizeAttribute[];
+            if (await AuthorizationManager.AuthorizeAsync(authorizeAttributes))
             {
                 await base.OnInitAsync();
-                await OnAuthorizationSuccess();
             }
-
-            // Iterate over AuthorizeAttributes on this instance.
-            foreach (AuthorizeAttribute attribute in authorizeAttributes)
-            {
-                // Get the authorization service that matches the policy name.
-                // Only one policy
-                IAuthorizationService authorizationService = AuthorizationServiceManager.GetAuthorizationService(attribute.Policy);
-                if (authorizationService != null)
-                {
-                    bool authorizeSuccess = await authorizationService.GetAuthorizationResult(this, attribute);
-                    if (!authorizeSuccess)
-                    {
-                        await base.OnInitAsync();
-                        await OnAuthorizationSuccess();
-                        break;
-                    }
-                }
-                // This hits if there is no service configured to handle the policy.
-                else
-                {
-                    throw new AuthorizationException($"No IAuthorizationService found for policy: {attribute.Policy}");
-                }
-            }
-            
         }
 
         /// <summary>
@@ -82,12 +56,6 @@ namespace ORMNZ.Blazor.Authorization
         /// </remarks>
         public virtual async Task OnAuthorizationSuccess() { }
 
-    }
-
-    public class AuthorizationException: Exception
-    {
-        public AuthorizationException(string message, Exception innerException = null)
-            : base(message, innerException) { }
     }
 
 }

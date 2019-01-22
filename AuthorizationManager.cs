@@ -56,6 +56,40 @@ namespace ORMNZ.Blazor.Authorization
         }
 
         /// <summary>
+        /// Evaluate a collection of authorize attributes to determine if any pass.
+        /// </summary>
+        /// <param name="sender">The class that invoked this method.</param>
+        /// <param name="authorizeAttributes">The attributes to evaluate.</param>
+        /// <returns>A bool indicating that one policy requirement was met.</returns>
+        public async Task<bool> AuthorizeAsync(object sender, params AuthorizeAttribute[] authorizeAttributes)
+        {
+            // If there are no attributes this passes.
+            if (authorizeAttributes.Count() == 0)
+            {
+                return true;
+            }
+            // Evaluate attributes to see if the requirements are satisfied.
+            foreach (AuthorizeAttribute authorizeAttribute in authorizeAttributes)
+            {
+                IAuthorizationService service = GetAuthorizationService(authorizeAttribute.Policy);
+                if (service != null)
+                {
+                    // Create the authorization context.
+                    AuthorizationContext context = new AuthorizationContext
+                    {
+                        Policy = authorizeAttribute.Policy,
+                        Roles = authorizeAttribute.GetRolesArray(),
+                        Caller = sender.GetType()
+                    };
+                    // If this policy was successfully authenticated report success.
+                    if (await service.AuthorizeAsync(context)) return true;
+                }
+            }
+            // The defauly is to fail;
+            return false;
+        }
+
+        /// <summary>
         /// Get an authorization service by policy name.
         /// </summary>
         /// <param name="policyName">The name of the policy.</param>

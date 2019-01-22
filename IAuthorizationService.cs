@@ -78,16 +78,18 @@ namespace ORMNZ.Blazor.Authorization
     }
 
     /// <summary>
-    /// The authorization handler delegate signature.
-    /// </summary>
-    /// <param name="context">The current authorization context.</param>
-    /// <returns></returns>
-    public delegate Task<bool> AuthorizationHandler(AuthorizationContext context);
-
-    /// <summary>
     /// A authorization options builder delegate signature.
     /// </summary>
     /// <param name="options"></param>
     public delegate void AuthorizationServiceOptionsBuilder(AuthorizaationServiceOptions options);
+
+    /// <summary>
+    /// Create an Authorization exception.
+    /// </summary>
+    public class AuthorizationException : Exception
+    {
+        public AuthorizationException(string message, Exception innerException = null)
+            : base(message, innerException) { }
+    }
 
 }

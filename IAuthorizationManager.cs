@@ -50,5 +50,13 @@ namespace ORMNZ.Blazor.Authorization
         /// <param name="authorizationServices">The services to add.</param>
         void AddAuthorizationServices(params IAuthorizationService[] authorizationServices);
 
+        /// <summary>
+        /// Authorize this attribute.
+        /// </summary>
+        /// <param name="sender">The class invoking this method.</param>
+        /// <param name="attribute">The attribute being evaluated.</param>
+        /// <returns>A bool indicating authorization success</returns>
+        Task<bool> AuthorizeAsync(object sender, params AuthorizeAttribute[] attribute);
+
     }
 }
