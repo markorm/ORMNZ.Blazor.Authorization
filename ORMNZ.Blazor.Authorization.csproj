@@ -6,6 +6,19 @@
     <IsPackable>true</IsPackable>
     <BlazorLinkOnBuild>false</BlazorLinkOnBuild>
     <LangVersion>7.3</LangVersion>
+    <Version>0.01</Version>
+    <Company>ORMNZ</Company>
+    <Authors>Mark Ormandy</Authors>
+    <Description>Authorization services and utilities for Blazor.</Description>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <Copyright>2019 Mark Ormandy</Copyright>
+    <PackageLicenseUrl>https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/markorm/ORMNZ.Blazor.Authorization</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/markorm/ORMNZ.Blazor.Authorization</RepositoryUrl>
+    <RepositoryType>Git</RepositoryType>
+    <PackageTags>Blazor, Authorization, WASM, Web Assembly</PackageTags>
+    <PackageReleaseNotes>Work in progress build.</PackageReleaseNotes>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
   </PropertyGroup>
 
   <ItemGroup>
