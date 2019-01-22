@@ -18,7 +18,7 @@ from the AuthorizationServiceBase class.
 register it as a service:
 `services.UseAuthorizationManager<MyAuthorizationManager>();`
 * Add your IAuthorizationService instances:
-`services.AddAuthorization<MyAuthorizationService>();`
+`services.AddAuthorization<MyAuthorizationService>(options => {});`
 * Inject the IAuthorizationManager service into your Blazor component.
 * Inherit from the AuthorizedComponent class
 * Add AuthorizeAttribute Attributes to your component:
@@ -103,6 +103,41 @@ public class UserAuthorizationService: AuthorizationServiceBase
 
 ***
 
+### Example Registering services
+
+```csharp
+public void ConfigureServices(IServiceCollection services)
+{
+
+    // Add the authorization services
+    services
+        // EXMAPLE: Specify the IAuthorizationManager instance to use.
+        // In this case adding the default AuthorizationManager is redundant,
+        // this default will be used if no custom IAuthorizationManager is
+        // used here.
+        .UseAuthorizationManager<AuthorizationManager>()
+        // Add an authorization service to handle the "Users" policy.
+        // This class' Authorize method will be invoked any time there is
+        // an Authorize attribute with this policy set
+        .AddAuthorization<UserAuthorizationService>(options =>
+        {
+            options.Policy = "Users";
+        })
+        // Add an authorization service to handle the "Admins" policy.
+        .AddAuthorization<AdminAuthorizationService>(options =>
+        {
+            options.Policy = "Admins";
+        });
+
+    // Since Blazor is running on the server, we can use an application service
+    // to read the forecast data.
+    services.AddSingleton<WeatherForecastService>();
+
+}
+```
+
+***
+
 ### Example AuthorizedComponent
 
 An example of the FetchData compnnent using authorization.
@@ -132,6 +167,50 @@ public class FetchDataViewModel : AuthorizedComponent
 }
 ```
 
+And the modified FetchData page now using authorization.
+
+```html
+@using ORMNZ.Blazor.DevEnv.App.Services
+@using ORMNZ.Blazor.Authorization
+@page "/fetchdata"
+@inject IAuthorizationManager AuthorizationServiceManager
+@inject WeatherForecastService ForecastService
+@inherits FetchDataViewModel
+
+<h1>Weather forecast</h1>
+
+<p>This component demonstrates fetching data from the server.</p>
+
+@if (forecasts == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Temp. (C)</th>
+                <th>Temp. (F)</th>
+                <th>Summary</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var forecast in forecasts)
+            {
+                <tr>
+                    <td>@forecast.Date.ToShortDateString()</td>
+                    <td>@forecast.TemperatureC</td>
+                    <td>@forecast.TemperatureF</td>
+                    <td>@forecast.Summary</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+```
+
 ***
 
 ### Limitations
@@ -145,6 +224,8 @@ the required work on your IAuthorizationService.AuthorizeAsync methods.
 ### TODOS
 
 * Implement unit tests for the project to validate the effectiveness and reliability of the current implementation.
+
+* Extend the AuthorizationServiceOptionsBuilder and AuthorizationServiceOptions types to allow for greater configurability.
 
 * Use this assembly from other Blazor projects to ensure this approach is sensible for a variety of existing applications.
 
