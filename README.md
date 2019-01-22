@@ -173,7 +173,7 @@ And the modified FetchData page now using authorization.
 @using ORMNZ.Blazor.DevEnv.App.Services
 @using ORMNZ.Blazor.Authorization
 @page "/fetchdata"
-@inject IAuthorizationManager AuthorizationServiceManager
+@inject IAuthorizationManager AuthorizationManager
 @inject WeatherForecastService ForecastService
 @inherits FetchDataViewModel
 
