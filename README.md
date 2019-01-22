@@ -139,7 +139,7 @@ public void ConfigureServices(IServiceCollection services)
 ### Example AuthorizedComponent
 
 An example of the FetchData compnnent using authorization.
-In this example the razor view is inheriting from this class with `@inherits FetchDataViewModel`
+The base AuthorizedComponent class receives the injected IAuthorizationManager as AuthorizationManager. 
 
 ```csharp
 [Authorize(Policy = "Users", Roles = "GetWeatherForecasts")]
@@ -158,7 +158,6 @@ public class FetchDataViewModel : AuthorizedComponent
 	/// </summary>
 	public override async Task OnAuthorizationComplete()
 	{
-		await base.OnInitAsync();
 		forecasts = await ForecastService.GetForecastAsync(DateTime.Now);
 	}
 
