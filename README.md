@@ -48,7 +48,7 @@ public class UserAuthorizationService: AuthorizationServiceBase
     /// <summary>
     /// An example of a user that we are going to evaluate.
     /// </summary>
-    public User CurrentUser { get; private set; } = new User
+    public User CurrentUser = new User
     {
         FirstName = "Bob",
         LastName = "Dole",
@@ -67,7 +67,7 @@ public class UserAuthorizationService: AuthorizationServiceBase
     }
 
     /// <summary>
-    /// Authorize access agains the current user.
+    /// Authorize access against the current user.
     /// </summary>
     public override async Task<bool> AuthorizeAsync(AuthorizationContext context)
     {
@@ -129,9 +129,7 @@ public void ConfigureServices(IServiceCollection services)
             options.Policy = "Admins";
         });
 
-    // Since Blazor is running on the server, we can use an application service
-    // to read the forecast data.
-    services.AddSingleton<WeatherForecastService>();
+    // Add your other services...
 
 }
 ```
